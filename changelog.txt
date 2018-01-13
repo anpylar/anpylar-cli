@@ -1,0 +1,10 @@
+1.1.2
+-----
+
+  - Correct the list of files to be packaged in data, replacing vfs with
+    auto_vfs files
+
+1.1.1
+-----
+
+  - Initial Public Release
