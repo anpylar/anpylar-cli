@@ -118,10 +118,12 @@ setuptools.setup(
     # package_data={'sample': ['package_data.dat'],},
     package_data={
         'anpylar.data': [
+            'LICENSE.brython',
+            'anpylar.auto_vfs.js',
+            'anpylar_d.auto_vfs.js',
+            'anpylar_js.js',
             'brython.js',
             'brython_stdlib.js',
-            'anpylar.vfs.js',
-            'anpylar_js.js',
         ],
     },
     # Although 'package_data' is the preferred approach, in some case you may
