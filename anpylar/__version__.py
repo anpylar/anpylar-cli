@@ -6,6 +6,6 @@
 # can be found in the LICENSE file at http://anpylar.com/mit-license
 ###############################################################################
 
-__version__ = '1.1.1'
+__version__ = '1.1.2'
 
 __tversion__ = tuple(int(x) for x in __version__.split('.'))
