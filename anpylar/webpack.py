@@ -44,10 +44,6 @@ def run(pargs=None, name=None):
     # check if only anpylar has to be recreated
     if args.reset_anpylar:
         logging.info('Resetting anpylar.js to complete package')
-        if args.no_optimize:
-            logging.info('Optimizing stdlib')
-            bundler.optimize_stdlib()  # optimize stdlib
-
         bundler.write_bundle(APL_path)
         sys.exit(0)
 
@@ -147,13 +143,15 @@ def run(pargs=None, name=None):
     logging.debug('anpylar for __webpack__, set debug info')
     bundler.set_br_debug(pjsondebug)  # set to real value
 
-    logging.info('Optimizing stdlib')
-    bundler.optimize_stdlib()  # optimize stdlib
-    logging.info('Updating anpylar.js with optimized stdlib')
+    if not args.no_optimize:
+        logging.info('Optimizing stdlib')
+        bundler.optimize_stdlib()  # optimize stdlib
+
+    logging.info('Updating anpylar.js')
     bundler.write_bundle(APL_path)  # write it out
 
     if args.only_anpylar:
-        logging.info('Exiting after (only) updating anpylar (optimized)')
+        logging.info('Exiting after (only) updating anpylar')
         sys.exit(0)  # nothing else can be done
 
     logging.info('Preparing to put packages into the distribution')
