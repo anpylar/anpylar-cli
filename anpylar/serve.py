@@ -321,6 +321,11 @@ class RequestHandler(SimpleHTTPRequestHandler):
         logging.debug('POST request')
         if not cliargs.api_url:
             logging.debug('POST and no api_url defined')
+            logging.debug('POST headers: %s', str(self.headers))
+            clength = int(self.headers['Content-Length'])
+            logging.debug('Displaying Posted Body of length: %d', clength)
+            data = self.rfile.read(clength)
+            logging.debug('body is: %s', data)
             return
 
         querysplit = self.path.split('?')
