@@ -37,7 +37,8 @@ def run(pargs=None, name=None):
     paket = Paketizer(dnorm, extensions=extensions,
                       minify=not args.no_minify,
                       skipcomments=not args.no_headers,
-                      parser=parser)
+                      parser=parser,
+                      usename=args.pkg_name,
 
     logging.debug('Paket processed')
 
@@ -98,6 +99,11 @@ def parse_args(pargs=None, name=None):
                               'specified, the name of the base directory '
                               'will be used and the extension will be '
                               'automatically chosen'))
+
+    pgroup = parser.add_argument_group(title='Application options')
+    pgroup.add_argument('--pkg-name', required=False, action='store',
+                        default='',
+                        help=('Use last dirname if nothing specified'))
 
     pgroup.add_argument('--vfspath', required=False, action='store',
                         default='',
