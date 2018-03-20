@@ -262,11 +262,14 @@ Template_Wrapper_Footer = '''
 
 class Paketizer:
     def __init__(self, d, extensions=['.py'], minify=True, skipcomments=True,
-                 parser=None):
+                 parser=None, usename=None, asset_prefix=''):
         self.modules = modules = {}  # keep track of the loaded modules
 
         # The root package name is the last directory in the path provided
-        self.base = base = os.path.basename(d.rstrip(os.sep))
+        if usename:
+            self.base = base = usename
+        else:
+            self.base = base = os.path.basename(d.rstrip(os.sep))
 
         for root, dnames, fnames in os.walk(d):
             # must have __init__
@@ -300,7 +303,9 @@ class Paketizer:
                     # These are assets and not python packages/subpackages
                     # Replace the . with / to make them searchable using
                     # regular path syntax later
-                    modname = '/'.join((packagename.replace('.', '/'), fname))
+                    pparts = [] if not asset_prefix else [asset_prefix]
+                    pparts += [packagename.replace('.', '/'), fname]
+                    modname = '/'.join(pparts)
                     modext = []
 
                 # Reunite the path and normalize it for sanity
