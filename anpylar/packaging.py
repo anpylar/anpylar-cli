@@ -61,6 +61,7 @@ class Bundler:
     PATHS[ANPYLARJS_JS] = os.path.join(datadir, 'anpylar_js.js')
 
     def __init__(self, anpylarize=False):
+        self._added_anpylar_vfs = False
         self.prepared = False
         self.br_debug = True
         self.minify = not self.br_debug  # do not minify if debugging
@@ -98,6 +99,7 @@ class Bundler:
         # Place anpylar before any other package
         self.pkgs.insert(0, self.pkgs.pop())
         self.pakets.insert(0, self.pakets.pop())
+        self._added_anpylar_vfs = True
 
     def set_anpylar_vfs(self, path, auto=False):
         self.paths[self.ANPYLAR_VFS_JS] = path
@@ -157,12 +159,19 @@ class Bundler:
 
         self.prepared = True
 
-    def write_bundle(self, path, prepare=True):
+    def write_bundle(self, path, prepare=True, skip_packages=False):
         if prepare and not self.prepared:
             self.prepare_bundle()
 
         out = []
-        for val in self.comps.values():
+        for k, val in self.comps.items():
+            if k == self.PACKAGES and skip_packages:
+                # packages are only used for optimizing stdlib, skip them
+                if not self._added_anpylar_vfs:
+                    continue  # no anpylar, nothing to save
+
+                val = val[0]  # anpylar is 1st, save it (no regular pkg)
+
             out += val if isinstance(val, (list,)) else [val]
 
         makefile_error(path, out, itercontent=True)
