@@ -11,7 +11,7 @@ import os.path
 import sys
 
 from .logconfig import logconfig
-from .packaging import Bundler
+from .packaging import Bundler, ANPYLAR_JS
 from .utils import print_error, makefile_error, readfile_error
 
 
@@ -80,9 +80,14 @@ def run(pargs=None, name=None):
         logging.info('Optimizing stdlib for the bundle')
         bundler.optimize_stdlib()
 
-    logging.info('Writing bundle out to: %s', args.output)
-    bundler.write_bundle(os.path.normpath(args.output))
+    if args.skip_packages:
+        logging.info('Skipping addition of packages to the bundle')
 
+    logging.info('Writing bundle out to: %s', args.output)
+    bundler.write_bundle(
+        os.path.normpath(args.output),
+        skip_packages=args.skip_packages,
+    )
     logging.info('Done')
 
 
@@ -106,7 +111,7 @@ def parse_args(pargs=None, name=None):
     pgroup.add_argument('--brython_stdlib', action='store', default=None,
                         help='Use specific brython_stdlib.js for the bundle')
 
-    pgroup = parser.add_argument_group(title='Anpylar options')
+    pgroup = parser.add_argument_group(title='AnPylar options')
     pgroup.add_argument('--anpylar-js', action='store', default=None,
                         help='Use specific anpylar_js for the bundle')
 
@@ -139,6 +144,10 @@ def parse_args(pargs=None, name=None):
     pgroup.add_argument('--optimize', action='store_true',
                         help=('Optimize the size of the anpylar.js '
                               'by packaging only the needed stdlib modules'))
+
+    pgroup.add_argument('--skip-packages', action='store_true',
+                        help=('Optimize the size of the anpylar.js '
+                              'without writing the packages to the bundle'))
 
     pgroup = parser.add_mutually_exclusive_group()
     pgroup.add_argument('--quiet', '-q', action='store_true',
