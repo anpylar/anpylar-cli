@@ -67,7 +67,7 @@ def run(pargs=None, name=None):
         makefile_error(fout, content, parser=parser)
     else:  # auto-vfs option (default)
         logging.debug('Writing paket in auto_vfs.js format')
-        vfspath = os.path.basename(fout)
+        vfspath = args.vfspath or os.path.basename(fout)
         if not vfspath.endswith(VFS_JS_EXT):
             # The existing convention 'vfs.js' can be reused as extension
             if vfspath.endswith(AUTO_VFS_JS_EXT):
@@ -98,6 +98,10 @@ def parse_args(pargs=None, name=None):
                               'specified, the name of the base directory '
                               'will be used and the extension will be '
                               'automatically chosen'))
+
+    pgroup.add_argument('--vfspath', required=False, action='store',
+                        default='',
+                        help=('override vfspath logic for auto-loadable'))
 
     pgroup = parser.add_argument_group(title='Javascript/JSON Options')
     pgroup.add_argument('--var-name', required=False, action='store',
