@@ -39,6 +39,7 @@ def run(pargs=None, name=None):
                       skipcomments=not args.no_headers,
                       parser=parser,
                       usename=args.pkg_name,
+                      asset_prefix=args.asset_prefix)
 
     logging.debug('Paket processed')
 
@@ -104,6 +105,10 @@ def parse_args(pargs=None, name=None):
     pgroup.add_argument('--pkg-name', required=False, action='store',
                         default='',
                         help=('Use last dirname if nothing specified'))
+
+    pgroup.add_argument('--asset-prefix', required=False, action='store',
+                        default='',
+                        help=('Add a prefix to the non-python resources'))
 
     pgroup.add_argument('--vfspath', required=False, action='store',
                         default='',
