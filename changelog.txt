@@ -1,3 +1,10 @@
+1.1.5
+-----
+  - Update to anpylar 1.1.5
+  - Paketizer/-paketize can now add prefix to assets in packets and override
+    the application name
+  - Bundler/-bundle can use packages for stdlib optimization but skip addition
+
 1.1.4
 -----
   - Update to anpylar 1.1.4
